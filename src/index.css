@@ -1,0 +1,303 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  height: 100vh;
+
+  color: #ffffff;
+  overflow: hidden;
+  position: relative;
+}
+
+.navbar {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  padding: 22px 18px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 2px 2px white;
+}
+
+.logo {
+  font-size: 38px;
+  font-weight: bold;
+  color: white;
+  font-family: "Indie Flower", cursive;
+}
+
+.logo:hover {
+  color: #6a11cb;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.login-btn {
+  background: white;
+  color: #404258;
+  border: none;
+  padding: 8px 34px;
+  border-radius: 21px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 24px;
+  font-family: "Indie Flower", cursive;
+}
+
+.login-btn :hover {
+  background: #6a11cb;
+  color: white;
+}
+
+.logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 22px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 24px;
+  font-family: "Indie Flower", cursive;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+.auth-container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  padding: 35px 30px;
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: 390px;
+  width: 100%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  z-index: 2;
+  animation: slideUp 0.8s ease forwards;
+  margin: 180px auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.auth-container h2 {
+  font-size: 42px;
+  font-family: 'Times New Roman', Times, serif;
+  margin: 18px;
+}
+
+.auth-container h2:hover {
+  color: #6a11cb;
+}
+
+.auth-container input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.3s ease, background 0.3s ease;
+}
+
+.auth-container input:focus {
+  border-color: #6a11cb;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.auth-container select.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+.auth-container button {
+  width: 100%;
+  background: linear-gradient(90deg, #2575fc, #16213e);
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+}
+
+.auth-container button:hover {
+  transform: scale(1.05);
+
+}
+
+.auth-container p {
+  font-size: 18px;
+  margin: 12px;
+}
+
+.auth-container p:hover {
+  color: red;
+}
+
+/* Main Container */
+.todo-container {
+  max-width: 550px;
+  margin: 120px auto;
+  padding: 20px;
+  background: repeating-linear-gradient(white,
+      white 28px,
+      #e3e3e3 29px);
+  /* Notebook lines */
+  border: 2px solid #d4d4d4;
+  border-radius: 12px;
+  position: relative;
+  font-family: "Indie Flower", cursive;
+  /* Handwritten font */
+  color: #1a1a2e;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.todo-container {
+  position: relative;
+}
+
+.punch-holes {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 10px;
+  gap: 260px;
+}
+
+.punch-holes::before,
+.punch-holes::after {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-color: #000;
+  border-radius: 50%;
+  box-shadow: 30px 0 #1a1a2e, 60px 0 #1a1a2e, 90px 0 #1a1a2e, 120px 0 #1a1a2e, 150px 0 #1a1a2e, 180px 0 #1a1a2e, 210px 0 #1a1a2e;
+
+}
+
+
+/* Heading */
+.todo-container h2 {
+  text-align: center;
+  font-size: 38px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #1a1a2e;
+  text-shadow: 1px 1px #fff;
+}
+
+/* Input Section */
+.todo-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.todo-input input {
+  flex: 1;
+  padding: 10px;
+  border: 2px dashed #bbb;
+  border-radius: 8px;
+  font-size: 16px;
+  background: transparent;
+  outline: none;
+}
+
+.todo-input button {
+  background: #1a1a2e;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s;
+  color: white;
+}
+
+.todo-input button:hover {
+  background: #6a11cb;
+}
+
+/* Todo Items */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.todo-card {
+  display: flex;
+  justify-content: space-between;
+  /* pushes text left, buttons right */
+  align-items: center;
+  /* vertical alignment */
+  background: #fffbe6;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.todo-card.completed span {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.todo-card span {
+  flex: 1;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.actions button:hover {
+  transform: scale(1.2);
+}
