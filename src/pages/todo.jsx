@@ -9,7 +9,7 @@ export default function Todo() {
 
   // Load todos when page opens
   useEffect(() => {
-    axios.get("http://localhost:5000/api/todos", {
+    axios.get("https://todo-app-01.up.railway.app/api/api/todos", {
       headers: { Authorization: token }
     })
       .then(res => setTodos(res.data))
@@ -22,7 +22,7 @@ export default function Todo() {
 
     // If editing
     if (editId) {
-      axios.put(`http://localhost:5000/api/todos/${editId}`, { text }, {
+      axios.put(`https://todo-app-01.up.railway.app/api/todos/${editId}`, { text }, {
         headers: { Authorization: token }
       })
         .then(res => {
@@ -33,7 +33,7 @@ export default function Todo() {
     }
     // If adding new
     else {
-      axios.post("http://localhost:5000/api/todos", { text }, {
+      axios.post("https://todo-app-01.up.railway.app//api/todos", { text }, {
         headers: { Authorization: token }
       })
         .then(res => {
@@ -45,7 +45,7 @@ export default function Todo() {
 
   // Delete todo
   const deleteTodo = (id) => {
-    axios.delete(`http://localhost:5000/api/todos/${id}`, {
+    axios.delete(`https://todo-app-01.up.railway.app/api/todos/${id}`, {
       headers: { Authorization: token }
     })
       .then(() => setTodos(todos.filter(t => t._id !== id)));
