@@ -9,7 +9,7 @@ export default function Todo() {
 
   // Load todos when page opens
   useEffect(() => {
-    axios.get("https://todo-app-01.up.railway.app/api/api/todos", {
+    axios.get("https://todo-app-01.up.railway.app/api/todos", {
       headers: { Authorization: token }
     })
       .then(res => setTodos(res.data))
