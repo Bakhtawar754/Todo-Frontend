@@ -53,11 +53,12 @@ export default function Todo() {
 
   // Mark todo as completed
   const toggleComplete = (id) => {
-    axios.put(`http://localhost:5000/api/todos/${id}/toggle`, {}, {
-      headers: { Authorization: token }
-    })
-      .then(res => setTodos(todos.map(t => t._id === id ? res.data : t)));
-  };
+  axios.put(`https://todo-app-01.up.railway.app/api/todos/${id}/toggle`, {}, {
+    headers: { Authorization: token }
+  })
+  .then(res => setTodos(todos.map(t => t._id === id ? res.data : t)))
+  .catch(err => console.error(err));
+};
 
   return (
 

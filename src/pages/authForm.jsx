@@ -21,7 +21,7 @@ export default function AuthForm({ setIsLoggedIn, setUsername }) {
     try {
       if (isLogin) {
         // LOGIN
-        const res = await axios.post("http://localhost:5000/api/auth/login", {
+        const res = await axios.post("https://todo-app-01.up.railway.app/api/auth/login", {
           email,
           password,
         });
@@ -32,7 +32,7 @@ export default function AuthForm({ setIsLoggedIn, setUsername }) {
         navigate("/todos");
       } else {
         // SIGNUP
-        await axios.post("http://localhost:5000/api/auth/signup", {
+        await axios.post("https://todo-app-01.up.railway.app/api/auth/signup", {
           username: usernameInput,
           email,
           password,
