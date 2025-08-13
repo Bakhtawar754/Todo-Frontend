@@ -2,44 +2,46 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Todo() {
-  const [todos, setTodos] = useState([]); // store all todos
-  const [text, setText] = useState("");   // input text
-  const [editId, setEditId] = useState(null); // which todo we are editing
-  const token = localStorage.getItem("token"); // auth token
+  const [todos, setTodos] = useState([]);
+  const [text, setText] = useState("");
+  const [editId, setEditId] = useState(null);
+  const token = localStorage.getItem("token");
 
-  // Load todos when page opens
+  // Load todos
   useEffect(() => {
+    if (!token) return; // no token, no request
     axios.get("https://todo-app-01.up.railway.app/api/todos", {
       headers: { Authorization: token }
     })
-      .then(res => setTodos(res.data))
-      .catch(err => console.log(err));
-  }, []);
+    .then(res => setTodos(res.data))
+    .catch(err => console.error("Error fetching todos:", err));
+  }, [token]);
 
   // Add or Edit todo
   const saveTodo = () => {
     if (!text.trim()) return alert("Enter a task");
 
-    // If editing
     if (editId) {
+      // Editing
       axios.put(`https://todo-app-01.up.railway.app/api/todos/${editId}`, { text }, {
         headers: { Authorization: token }
       })
-        .then(res => {
-          setTodos(todos.map(t => t._id === editId ? res.data : t));
-          setText("");
-          setEditId(null);
-        });
-    }
-    // If adding new
-    else {
-      axios.post("https://todo-app-01.up.railway.app//api/todos", { text }, {
+      .then(res => {
+        setTodos(todos.map(t => t._id === editId ? res.data : t));
+        setText("");
+        setEditId(null);
+      })
+      .catch(err => console.error("Error updating todo:", err));
+    } else {
+      // Adding new
+      axios.post("https://todo-app-01.up.railway.app/api/todos", { text }, {
         headers: { Authorization: token }
       })
-        .then(res => {
-          setTodos([...todos, res.data]);
-          setText("");
-        });
+      .then(res => {
+        setTodos([...todos, res.data]);
+        setText("");
+      })
+      .catch(err => console.error("Error adding todo:", err));
     }
   };
 
@@ -48,23 +50,22 @@ export default function Todo() {
     axios.delete(`https://todo-app-01.up.railway.app/api/todos/${id}`, {
       headers: { Authorization: token }
     })
-      .then(() => setTodos(todos.filter(t => t._id !== id)));
+    .then(() => setTodos(todos.filter(t => t._id !== id)))
+    .catch(err => console.error("Error deleting todo:", err));
   };
 
-  // Mark todo as completed
+  // Toggle complete
   const toggleComplete = (id) => {
-  axios.put(`https://todo-app-01.up.railway.app/api/todos/${id}/toggle`, {}, {
-    headers: { Authorization: token }
-  })
-  .then(res => setTodos(todos.map(t => t._id === id ? res.data : t)))
-  .catch(err => console.error(err));
-};
+    axios.put(`https://todo-app-01.up.railway.app/api/todos/${id}/toggle`, {}, {
+      headers: { Authorization: token }
+    })
+    .then(res => setTodos(todos.map(t => t._id === id ? res.data : t)))
+    .catch(err => console.error("Error toggling todo:", err));
+  };
 
   return (
-
     <div className="todo-container">
       <div className="punch-holes" style={{ width: "300px", height: "50px" }}></div>
-
       <h2>To-Do List_ </h2>
 
       {/* Input and Button */}
@@ -80,7 +81,7 @@ export default function Todo() {
         </button>
       </div>
 
-      {/* List of Todos */}
+      {/* Todos */}
       <div className="todo-list">
         {todos.map(todo => (
           <div key={todo._id} className={`todo-card ${todo.completed ? "completed" : ""}`}>
@@ -92,8 +93,6 @@ export default function Todo() {
           </div>
         ))}
       </div>
-
-
     </div>
   );
 }
