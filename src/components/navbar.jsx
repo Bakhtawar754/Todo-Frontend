@@ -18,7 +18,7 @@ export default function Navbar({ isLoggedIn, username, onLogout }) {
             </button>
           </>
         ) : (
-          <Link to="/" className="login-btn">Login</Link>
+          <Link to="/" className="login-btn">Logout</Link>
         )}
       </div>
     </nav>

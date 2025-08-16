@@ -1,31 +1,53 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/navbar";
-import AuthForm from "./pages/authForm";
-import Portfolio from "./pages/portfolio";
-import Portfoliolayout from "./pages/portfolioLayout";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Home from "./pages/home.jsx";
+import AuthForm from "./pages/authForm.jsx";
+import Portfolio from "./pages/portfolio.jsx";
+import Portfoliolayout from "./pages/portfolioLayout.jsx";
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState(""); // 👈 Store username
+  const token = localStorage.getItem("token");
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
+  const [username, setUsername] = useState(localStorage.getItem("username") || "");
+  const [showAuth, setShowAuth] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    setUsername(""); // 👈 Clear username
-  };
+  const openAuthForm = () => setShowAuth(true);
+  const closeAuthForm = () => setShowAuth(false);
 
   return (
-    <Router>
-      <Navbar isLoggedIn={isLoggedIn} username={username} onLogout={handleLogout} />
-      
+    <BrowserRouter>
+      {showAuth && (
+        <AuthForm
+          setIsLoggedIn={setIsLoggedIn}
+          setUsername={setUsername}
+          closeForm={closeAuthForm}
+        />
+      )}
+
       <Routes>
-        <Route path="/" element={<AuthForm setIsLoggedIn={setIsLoggedIn}
-          setUsername={setUsername} />} />
-        <Route path="/portfolio" element={isLoggedIn ? (<Portfolio />) : ( <AuthForm setIsLoggedIn={setIsLoggedIn}
-         setUsername={setUsername}/> ) } />
-            <Route path="/portfoliolayout" element={<Portfoliolayout />} />
-    </Routes>
-    </Router>
+        <Route
+          path="/"
+          element={
+            <Home
+              isLoggedIn={isLoggedIn}
+              username={username}
+              openAuthForm={openAuthForm}
+            />
+          }
+        />
+
+        {/* Protected Portfolio Page */}
+        <Route
+          path="/portfolio"
+          element={isLoggedIn ? <Portfolio /> : <Navigate to="/" />}
+        />
+
+        {/* Protected Portfolio Layout Page */}
+        <Route
+          path="/portfoliolayout"
+          element={isLoggedIn ? <Portfoliolayout /> : <Navigate to="/" />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }

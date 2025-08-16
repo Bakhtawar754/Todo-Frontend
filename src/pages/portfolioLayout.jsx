@@ -5,7 +5,8 @@ export default function Portfoliolayout() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const profile = state?.profile;
+  // Use state first, fallback to localStorage
+  const profile = state?.profile || JSON.parse(localStorage.getItem("profile"));
 
   if (!profile) {
     return (
@@ -19,8 +20,12 @@ export default function Portfoliolayout() {
   return (
     <div className="portfolio-container">
       <h2>{profile.name}'s Portfolio</h2>
-      <p><strong>Skills:</strong> {profile.skills}</p>
-      <p><strong>Projects:</strong></p>
+      <p>
+        <strong>Skills:</strong> {profile.skills}
+      </p>
+      <p>
+        <strong>Projects:</strong>
+      </p>
       <pre>{profile.projects}</pre>
       <p>
         <strong>GitHub:</strong>{" "}
@@ -28,6 +33,8 @@ export default function Portfoliolayout() {
           {profile.github}
         </a>
       </p>
+
+      <button onClick={() => navigate("/portfolio")}>Edit Portfolio</button>
     </div>
   );
 }

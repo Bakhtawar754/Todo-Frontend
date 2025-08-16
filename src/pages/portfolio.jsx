@@ -1,121 +1,110 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from "../components/navbar.jsx";
 
 export default function Portfolio() {
   const [profile, setProfile] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    skills: "",
-    projects: "",
-    github: ""
-  });
-  const [isEditing, setIsEditing] = useState(false);
+  const [form, setForm] = useState({ name: "", summary: "", skills: "", github: "" });
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
-  const navigate = useNavigate();
 
-  // Updated API base to point to /api/portfolio
-  const API_BASE = "https://todo-app-01.up.railway.app/api/portfolio";
+  const API_BASE = "https://todo-backend-production-81ea.up.railway.app/api/portfolio";
 
   useEffect(() => {
     if (!token) return;
 
-    axios
-      .get(`${API_BASE}`, {
-        headers: { Authorization: token }
-      })
-      .then((res) => {
-        setProfile(res.data);
-        setFormData(res.data);
-      })
-      .catch((err) => console.error("Error loading profile:", err));
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(API_BASE, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.data) setProfile(res.data);
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      }
+    };
+    fetchProfile();
   }, [token]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const saveProfile = () => {
+  const saveProfile = async () => {
     setLoading(true);
-    const headers = { Authorization: token };
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
 
-    const request = profile
-      ? axios.put(`${API_BASE}/${profile._id}`, formData, { headers })
-      : axios.post(`${API_BASE}`, formData, { headers });
+      let res;
+      if (profile) {
+        res = await axios.put(`${API_BASE}/${profile._id}`, form, { headers });
+      } else {
+        res = await axios.post(API_BASE, form, { headers });
+      }
 
-    request
-      .then((res) => {
-        setProfile(res.data);
-        setIsEditing(false);
-        navigate("/portfoliolayout", { state: { profile: res.data } });
-      })
-      .catch((err) => console.error("Error saving profile:", err))
-      .finally(() => setLoading(false));
+      setProfile(res.data);
+      localStorage.setItem("profile", JSON.stringify(res.data));
+      navigate("/portfoliolayout", { state: { profile: res.data } });
+    } catch (err) {
+      console.error("Error saving profile:", err);
+      alert(err.response?.data?.message || "Something went wrong");
+    }
+    setLoading(false);
   };
 
   return (
-    <div className="portfolio-container">
-      <div className="top-bar">
-        <h2>Welcome, {username || "Guest"}</h2>
-      </div>
+    <>
+      {/* Navbar outside container */}
+      <Navbar />
 
-      <h3>My Portfolio</h3>
-
-      {isEditing || !profile ? (
-        <div className="profile-form">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="skills"
-            placeholder="Skills (comma-separated)"
-            value={formData.skills}
-            onChange={handleChange}
-          />
-          <textarea
-            name="projects"
-            placeholder="Projects description"
-            value={formData.projects}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="github"
-            placeholder="GitHub Link"
-            value={formData.github}
-            onChange={handleChange}
-          />
-          <button onClick={saveProfile} disabled={loading}>
-            {loading
-              ? "Saving..."
-              : profile
-              ? "Update & View Portfolio"
-              : "Create & View Portfolio"}
-          </button>
+      <div className="portfolio-container">
+        <div className="top-bar">
+          <h2>Welcome, {username || "Guest"}</h2>
         </div>
-      ) : (
-        <div className="profile-preview">
-          <h3>{profile.name}</h3>
-          <p><strong>Skills:</strong> {profile.skills}</p>
-          <p><strong>Projects:</strong></p>
-          <pre>{profile.projects}</pre>
-          <p>
-            <strong>GitHub:</strong>{" "}
+
+        {profile ? (
+          <div className="profile-preview">
+            <h2>{profile.name}</h2>
+            <p className="summary">{profile.summary}</p>
+            <h4>Skills</h4>
+            <p>{profile.skills}</p>
+            <h4>GitHub</h4>
             <a href={profile.github} target="_blank" rel="noreferrer">
               {profile.github}
             </a>
-          </p>
-          <button onClick={() => setIsEditing(true)}>Edit</button>
-        </div>
-      )}
-    </div>
+            <button onClick={() => setForm(profile)}>Edit</button>
+          </div>
+        ) : (
+          <div className="profile-form">
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+            <textarea
+              placeholder="Summary / About Me"
+              value={form.summary}
+              onChange={(e) => setForm({ ...form, summary: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Skills (comma separated)"
+              value={form.skills}
+              onChange={(e) => setForm({ ...form, skills: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="GitHub Profile URL"
+              value={form.github}
+              onChange={(e) => setForm({ ...form, github: e.target.value })}
+            />
+            <button onClick={saveProfile} disabled={loading}>
+              {loading ? "Saving..." : "Create / Update Portfolio"}
+            </button>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
