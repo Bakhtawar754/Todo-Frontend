@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
 import AuthForm from "./pages/authForm";
-import Todo from "./pages/todo";
+import Portfolio from "./pages/portfolio";
+import Portfoliolayout from "./pages/portfolioLayout";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,8 +22,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<AuthForm setIsLoggedIn={setIsLoggedIn}
           setUsername={setUsername} />} />
-        <Route path="/todos" element={isLoggedIn ? (<Todo />) : ( <AuthForm setIsLoggedIn={setIsLoggedIn}
+        <Route path="/portfolio" element={isLoggedIn ? (<Portfolio />) : ( <AuthForm setIsLoggedIn={setIsLoggedIn}
          setUsername={setUsername}/> ) } />
+            <Route path="/portfoliolayout" element={<Portfoliolayout />} />
     </Routes>
     </Router>
   );

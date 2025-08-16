@@ -29,7 +29,7 @@ export default function AuthForm({ setIsLoggedIn, setUsername }) {
         localStorage.setItem("username", res.data.username);
         setIsLoggedIn(true);
         setUsername(res.data.username);
-        navigate("/todos");
+        navigate("/portfolio");
       } else {
         // SIGNUP
         await axios.post("https://todo-app-01.up.railway.app/api/auth/signup", {

@@ -6,7 +6,7 @@ export default function Navbar({ isLoggedIn, username, onLogout }) {
     <nav className="navbar">
       <div className="nav-left">
         <i className="fas fa-tasks" style={{ marginRight: "8px", fontSize: "40px"}}></i>
-        <span className="logo">Todo</span>
+        <span className="logo">Portfolio_</span>
       </div>
 
       <div className="nav-right">
